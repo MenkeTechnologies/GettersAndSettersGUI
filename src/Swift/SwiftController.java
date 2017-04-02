@@ -1,13 +1,11 @@
 package Swift;
 
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 import mainPackage.MainUtilities;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -23,37 +21,47 @@ public class SwiftController extends LanguageController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
+        swiftInputTextArea.setText("class Dog{\n" +
+                "    var name : String = \"dogs\"\n" +
+                "    var age : Int\n" +
+                "    var weight : Int = 55\n" +
+                "    var cool : Double\n" +
+                "    ");
 
         textAreas.addAll(Arrays.asList(swiftInputTextArea, swiftOutputTextArea));
 
         swiftGenerator = new SwiftGenerator();
     }
 
-    public String generateSwift(HashMap<String, Boolean> selected) {
+    public String generateSwift(HashMap<String, Boolean> selected, boolean dialog) {
 
         String outputText = "";
 
         String className = swiftGenerator.parseProperties(swiftInputTextArea.getText());
 
-        if (!className.equals(null)){
+        if (!className.equals(null)) {
 
-            outputText+= swiftGenerator.generateClassDeclaration(className);
+            if (dialog)
+                MainUtilities.askForProperties(swiftGenerator.properties, selected);
 
-            if (selected.get("getter")){
+            outputText += swiftGenerator.generateClassDeclaration(className);
+
+            if (selected.get("constructor")) {
+                outputText += swiftGenerator.generateConstructor();
+            }
+
+            if (selected.get("getter")) {
 
                 outputText += swiftGenerator.generateGetters();
             }
 
-            if (selected.get("setter")){
+            if (selected.get("setter")) {
                 outputText += swiftGenerator.generateSetters();
             }
 
-            if (selected.get("constructor")){
-                outputText += swiftGenerator.generateConstructor();
-            }
 
-            if (selected.get("toString")){
+
+            if (selected.get("toString")) {
                 outputText += swiftGenerator.generateToString();
             }
 
@@ -62,11 +70,14 @@ public class SwiftController extends LanguageController implements Initializable
 
         swiftOutputTextArea.setText(outputText);
 
-        if (selected.get("clipboard")){
+        if (selected.get("clipboard")) {
             MainUtilities.copyToClipboard(outputText);
         }
 
         return outputText;
+    }
 
+    public void generateSwiftWithOptions(HashMap<String, Boolean> options) {
+        generateSwift(options, true);
     }
 }

@@ -53,7 +53,7 @@ public class Main extends Application {
         primaryStage.setTitle("Getter And Setter Generator");
         Scene scene = new Scene(root, 1000, 1000);
 
-
+        scene.getStylesheets().add("styles.css");
 
         primaryStage.setScene(scene);
         primaryStage.show();

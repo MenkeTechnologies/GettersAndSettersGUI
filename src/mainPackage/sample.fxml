@@ -15,7 +15,7 @@
       <HBox prefHeight="18.0" prefWidth="576.0" BorderPane.alignment="CENTER">
          <children>
             <Button id="generate" fx:id="generateButton" defaultButton="true" mnemonicParsing="false" onAction="#generateCode" text="Generate" />
-            <Button mnemonicParsing="false" text="Generate With Options" />
+            <Button mnemonicParsing="false" text="Generate With Options" onAction="#generateCodeWithOptions" />
             <Button mnemonicParsing="false" onAction="#clearAll" text="Clear This Tab" />
             <Button mnemonicParsing="false" onAction="#openSettingsScene" text="Settings" />
          </children>

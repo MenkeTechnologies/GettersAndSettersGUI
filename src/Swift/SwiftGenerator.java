@@ -53,7 +53,6 @@ public class SwiftGenerator extends GeneratorAncestor {
                 String propertyName = null;
                 String type = null;
                 String initialValue = null;
-
                 StringTokenizer stringTokenizer = new StringTokenizer(line);
 
                 if (stringTokenizer.hasMoreTokens()) {
@@ -69,14 +68,14 @@ public class SwiftGenerator extends GeneratorAncestor {
                             propertyName = line.substring(line.indexOf(stringTokenizer.nextToken()));
                             if (line.contains(":")) {
                                 propertyName = propertyName.substring(0, propertyName.indexOf(":")).trim();
-                                System.out.println(propertyName);
                                 if (line.contains("=")) {
-//                                System.out.println(line.indexOf(":"));
-//                                System.out.println(line.indexOf("="));
                                     type = line.substring(line.indexOf(":") + 1, line.indexOf("=")).trim();
-                                    System.out.println("type " + type);
                                     initialValue = line.substring(line.indexOf("=") + 1).trim();
-                                    System.out.println(initialValue);
+                                    while (checkForMultLineInitial(initialValue)) {
+                                        StringBuilder sb = new StringBuilder(initialValue);
+                                        sb.append("\n").append(FOUR_SPACES).append(scanner.nextLine().trim());
+                                        initialValue = sb.toString();
+                                    }
                                 } else {
                                     type = line.substring(line.indexOf(":") + 1).trim();
                                     initialValue = null;
@@ -97,6 +96,14 @@ public class SwiftGenerator extends GeneratorAncestor {
         }
 
         return className;
+    }
+
+    boolean checkForMultLineInitial(String line) {
+        if (line.charAt(line.length() - 1) == '+') {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

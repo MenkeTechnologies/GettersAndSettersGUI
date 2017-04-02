@@ -117,5 +117,6 @@ public class PythonController extends LanguageController implements Initializabl
 
     }
 
-
+    public void generatePythonWithOptions(HashMap<String, Boolean> options) {
+    }
 }

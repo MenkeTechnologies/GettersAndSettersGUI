@@ -9,8 +9,10 @@ import java.util.LinkedHashMap;
  */
 abstract public class GeneratorAncestor {
 
-    protected LinkedHashMap<String, String> properties = new LinkedHashMap<>();
+    public LinkedHashMap<String, String> properties = new LinkedHashMap<>();
     protected HashMap<String, String> initialValues = new HashMap<>();
+    protected HashMap<String, Boolean> multiLines = new HashMap<>();
+
 
     public abstract String generateClassDeclaration(String className);
 
