@@ -9,10 +9,7 @@ import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -45,6 +42,8 @@ public class PythonController extends LanguageController implements Initializabl
 
 
         System.out.println("Python Controller");
+
+        textAreas.addAll(Arrays.asList(pythonInputTextArea, pythonOutputTextArea));
     }
 
     public void generatePython(boolean toClipboard) {

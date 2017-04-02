@@ -6,6 +6,7 @@ import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -22,6 +23,7 @@ public class CppHeaderController extends LanguageController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        textAreas.addAll(Arrays.asList(cppHeaderInputTextArea, cppHeaderOutputTextArea));
 
     }
 }

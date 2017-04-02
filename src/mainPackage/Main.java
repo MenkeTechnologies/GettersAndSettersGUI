@@ -13,6 +13,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Main extends Application {
 
     @Override
@@ -55,8 +58,11 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        mainController.passControllers(pythonController, swiftController, cppHeaderController, cppImplementationController, cppStandaloneController);
-        pythonController.initBindings();
+        ArrayList<LanguageController> languageControllers = new ArrayList<>();
+        languageControllers.addAll(Arrays.asList(pythonController, swiftController, cppHeaderController, cppImplementationController, cppStandaloneController));
+        mainController.passControllers(languageControllers);
+        mainController.initBindings(scene, languageControllers);
+
 
     }
 

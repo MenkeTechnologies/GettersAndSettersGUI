@@ -6,6 +6,7 @@ import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -24,6 +25,8 @@ public class SwiftController extends LanguageController implements Initializable
         swiftGetterCheckBox.setOnAction(e->{
             System.out.println("selected the getter swift");
         });
+
+        textAreas.addAll(Arrays.asList(swiftInputTextArea, swiftOutputTextArea));
     }
 
 
