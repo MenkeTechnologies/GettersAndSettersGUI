@@ -5,11 +5,14 @@ import Swift.SwiftController;
 import CppHeader.CppHeaderController;
 import CppImplementation.CppImplementationController;
 import CppStandalone.CppStandaloneController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 
 import java.awt.*;
@@ -23,6 +26,8 @@ public class Controller implements Initializable {
     public TabPane mainTabPane;
     public Button generateButton;
     public CheckBox addToClipboardCheckBox;
+    public MenuBar menubar;
+    public MenuItem quitMenuItem;
     PythonController pythonController;
     SwiftController swiftController;
     CppHeaderController cppHeaderController;
@@ -32,6 +37,12 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        menubar.setUseSystemMenuBar(true);
+
+        quitMenuItem.setOnAction(e->{
+            Platform.exit();
+        });
 
         //**********************************************************************
         // MARK:Construct Python and CppHeader classes and pass in outlets,

@@ -17,19 +17,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main extends Application {
-
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         FXMLLoader mainLoader = new FXMLLoader(mainPackage.Controller.class.getResource("/mainPackage/sample.fxml"));
         BorderPane root = mainLoader.load();
         Controller mainController = mainLoader.getController();
 
-        TabPane mainTabPanes = (TabPane)root.getCenter();
+        TabPane mainTabPanes = (TabPane) root.getCenter();
 
         FXMLLoader pythonLoader = new FXMLLoader(Python.PythonController.class.getResource("/Python/PythonTab.fxml"));
         Tab pythonTab = pythonLoader.load();
-        PythonController pythonController =  pythonLoader.getController();
+        PythonController pythonController = pythonLoader.getController();
 
         FXMLLoader swiftLoader = new FXMLLoader(Swift.class.getResource("/Swift/SwiftTab.fxml"));
         Tab swiftTab = swiftLoader.load();
@@ -52,7 +51,8 @@ public class Main extends Application {
 
 
         primaryStage.setTitle("Getter And Setter Generator");
-        Scene scene = new Scene(root, 600,1000);
+        Scene scene = new Scene(root, 600, 1000);
+
 
 
         primaryStage.setScene(scene);
@@ -62,10 +62,7 @@ public class Main extends Application {
         languageControllers.addAll(Arrays.asList(pythonController, swiftController, cppHeaderController, cppImplementationController, cppStandaloneController));
         mainController.passControllers(languageControllers);
         mainController.initBindings(scene, languageControllers);
-
-
     }
-
 
     public static void main(String[] args) {
         launch(args);

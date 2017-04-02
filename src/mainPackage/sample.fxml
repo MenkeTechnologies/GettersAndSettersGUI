@@ -28,4 +28,35 @@
    <center>
       <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
    </center>
+   <top>
+      <VBox prefHeight="53.0" prefWidth="643.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar fx:id="menubar">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem fx:id="quitMenuItem" accelerator="Meta+Q" mnemonicParsing="false" text="Quit" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                <Button mnemonicParsing="false" text="Settings" />
+                  <ToggleButton mnemonicParsing="false" text="Add To Clipboard" />
+              </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </top>
 </BorderPane>
