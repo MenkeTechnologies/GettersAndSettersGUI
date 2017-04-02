@@ -20,9 +20,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader mainLoader = new FXMLLoader(mainPackage.Controller.class.getResource("/mainPackage/sample.fxml"));
+        FXMLLoader mainLoader = new FXMLLoader(MainController.class.getResource("/mainPackage/sample.fxml"));
         BorderPane root = mainLoader.load();
-        Controller mainController = mainLoader.getController();
+        MainController mainController = mainLoader.getController();
 
         TabPane mainTabPanes = (TabPane) root.getCenter();
 
@@ -30,28 +30,28 @@ public class Main extends Application {
         Tab pythonTab = pythonLoader.load();
         PythonController pythonController = pythonLoader.getController();
 
-        FXMLLoader swiftLoader = new FXMLLoader(Swift.class.getResource("/Swift/SwiftTab.fxml"));
+        FXMLLoader swiftLoader = new FXMLLoader(Swift.SwiftController.class.getResource("/Swift/SwiftTab.fxml"));
         Tab swiftTab = swiftLoader.load();
         SwiftController swiftController = swiftLoader.getController();
 
-        FXMLLoader cppHeaderLoader = new FXMLLoader(CppHeader.class.getResource("/CppHeader/CppHeaderTab.fxml"));
+        FXMLLoader cppHeaderLoader = new FXMLLoader(CppHeader.CppHeaderController.class.getResource("/CppHeader/CppHeaderTab.fxml"));
         Tab cppHeaderTab = cppHeaderLoader.load();
         CppHeaderController cppHeaderController = cppHeaderLoader.getController();
 
-        FXMLLoader cppImplementationLoader = new FXMLLoader(CppImplementation.class.getResource("/CppImplementation/CppImplementationTab.fxml"));
+        FXMLLoader cppImplementationLoader = new FXMLLoader(CppImplementation.CppImplementationController.class.getResource("/CppImplementation/CppImplementationTab.fxml"));
         Tab cppImplementationTab = cppImplementationLoader.load();
         CppImplementationController cppImplementationController = cppImplementationLoader.getController();
 
-        FXMLLoader cppStandaloneLoader = new FXMLLoader(CppStandalone.class.getResource("/CppStandalone/CppStandaloneTab.fxml"));
+        FXMLLoader cppStandaloneLoader = new FXMLLoader(CppStandalone.CppStandaloneController.class.getResource("/CppStandalone/CppStandaloneTab.fxml"));
         Tab cppStandaloneTab = cppStandaloneLoader.load();
         CppStandaloneController cppStandaloneController = cppStandaloneLoader.getController();
 
         mainTabPanes.getTabs().addAll(pythonTab, swiftTab, cppHeaderTab, cppImplementationTab, cppStandaloneTab);
-        mainTabPanes.getSelectionModel().selectFirst();
+        mainTabPanes.getSelectionModel().select(1);
 
 
         primaryStage.setTitle("Getter And Setter Generator");
-        Scene scene = new Scene(root, 600, 1000);
+        Scene scene = new Scene(root, 1000, 1000);
 
 
 

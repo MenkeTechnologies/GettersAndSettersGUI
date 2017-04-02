@@ -30,4 +30,15 @@ public class MainUtilities {
         alert.setContentText("Duplicate properties found");
         alert.showAndWait();
     }
+
+    public static String capitalizeFirstLetter(String name){
+
+      if (name.charAt(0) >= 97){
+          String uppercaseFirst = name.substring(0,1).toUpperCase();
+
+          return uppercaseFirst+name.substring(1);
+      } else {
+          return name;
+      }
+    }
 }

@@ -20,20 +20,31 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class MainController implements Initializable {
     public TabPane mainTabPane;
     public Button generateButton;
-    public CheckBox addToClipboardCheckBox;
     public MenuBar menubar;
     public MenuItem quitMenuItem;
+
+    public ToggleButton toStringToggleButton;
+    public ToggleButton setterToggleButton;
+    public ToggleButton getterToggleButton;
+    public ToggleButton constructorToggleButton;
+    public ToggleButton deleterToggleButton;
+    public ToggleButton addToClipboardToggleButton;
+
     PythonController pythonController;
     SwiftController swiftController;
     CppHeaderController cppHeaderController;
     CppImplementationController cppImplementationController;
     CppStandaloneController cppStandaloneController;
     ArrayList<LanguageController> languageControllers = new ArrayList<>();
+
+    HashMap<String, Boolean> options = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,13 +55,20 @@ public class Controller implements Initializable {
             Platform.exit();
         });
 
+        getterToggleButton.setSelected(true);
+        setterToggleButton.setSelected(true);
+        constructorToggleButton.setSelected(true);
+        toStringToggleButton.setSelected(true);
+
+
+
         //**********************************************************************
         // MARK:Construct Python and CppHeader classes and pass in outlets,
         // if tab pane is selected and generate button then call main method
         // in class file
         //**********************************************************************
 
-        System.out.println("Main Controller");
+        System.out.println("Main MainController");
     }
 
     public void clearAll(ActionEvent actionEvent) {
@@ -86,12 +104,21 @@ public class Controller implements Initializable {
     }
 
     public void generateCode(ActionEvent actionEvent) {
+
+        options.put("setter", setterToggleButton.isSelected());
+        options.put("getter", getterToggleButton.isSelected());
+        options.put("constructor", constructorToggleButton.isSelected());
+        options.put("deleter", deleterToggleButton.isSelected());
+        options.put("toString", toStringToggleButton.isSelected());
+        options.put("clipboard", addToClipboardToggleButton.isSelected());
+
         switch (mainTabPane.getSelectionModel().getSelectedIndex()) {
             case 0:
-                pythonController.generatePython(addToClipboardCheckBox.isSelected());
+                pythonController.generatePython(options);
                 break;
             case 1:
-
+                swiftController.generateSwift(options);
+                break;
             default:
                 System.out.println("error in tab selection...");
         }

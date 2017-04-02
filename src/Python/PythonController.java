@@ -16,11 +16,6 @@ import java.util.regex.Pattern;
  * Created by jacobmenke on 4/1/17.
  */
 public class PythonController extends LanguageController implements Initializable {
-    public CheckBox pythonGetterCheckBox;
-    public CheckBox pythonSetterCheckBox;
-    public CheckBox pythonConstructorCheckBox1;
-    public CheckBox pythonDeleterCheckBox;
-    public CheckBox pythonAddToClipboardCheckBox;
     public RadioButton pythonPropertiesRadio;
     public RadioButton pythonCustomRadio;
     public TextArea pythonInputTextArea;
@@ -41,12 +36,14 @@ public class PythonController extends LanguageController implements Initializabl
                 "    __playFull = True");
 
 
-        System.out.println("Python Controller");
-
         textAreas.addAll(Arrays.asList(pythonInputTextArea, pythonOutputTextArea));
     }
 
-    public void generatePython(boolean toClipboard) {
+    public void generatePython(HashMap<String, Boolean> selected) {
+
+
+
+
         properties = new ArrayList<>();
         values = new ArrayList<>();
         properties.clear();
@@ -94,12 +91,12 @@ public class PythonController extends LanguageController implements Initializabl
 
             outputText = sb.toString();
 
-            if (pythonConstructorCheckBox1.isSelected()) {
+            if (selected.get("constructor")) {
                 outputText += PythonUtilites.writePythonConstructor(properties);
             }
-            outputText += PythonUtilites.writePythonGettersAndSetters(properties, pythonGetterCheckBox.isSelected(), pythonSetterCheckBox.isSelected(), pythonDeleterCheckBox.isSelected());
+            outputText += PythonUtilites.writePythonGettersAndSetters(properties, selected.get("getter"), selected.get("setter"),selected.get("deleter"));
             pythonOutputTextArea.setText(outputText);
-            if (toClipboard) {
+            if (selected.get("clipboard")) {
                 MainUtilities.copyToClipboard(outputText);
             }
 

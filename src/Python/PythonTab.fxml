@@ -11,10 +11,6 @@
          <children>
             <HBox prefHeight="36.0" prefWidth="600.0">
                <children>
-                  <CheckBox id="gettersCheckBox" fx:id="pythonGetterCheckBox" mnemonicParsing="false" selected="true" text="Getters" />
-                  <CheckBox id="settersCheckBox" fx:id="pythonSetterCheckBox" mnemonicParsing="false" selected="true" text="Setters" />
-                  <CheckBox id="constructorCheckBox" fx:id="pythonConstructorCheckBox1" mnemonicParsing="false" selected="true" text="Constructor" />
-                  <CheckBox fx:id="pythonDeleterCheckBox" mnemonicParsing="false" selected="true" text="Deleter" />
                   <RadioButton fx:id="pythonPropertiesRadio" mnemonicParsing="false" text="Properties" />
                   <RadioButton fx:id="pythonCustomRadio" mnemonicParsing="false" text="Custom" />
                </children>

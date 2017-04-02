@@ -11,10 +11,6 @@
          <children>
             <HBox prefHeight="36.0" prefWidth="600.0">
                <children>
-                  <CheckBox id="gettersCheckBox" fx:id="cppStandaloneGetterCheckBox" mnemonicParsing="false" selected="true" text="Getters" />
-                  <CheckBox id="settersCheckBox" fx:id="cppStandaloneSetterCheckBox" mnemonicParsing="false" selected="true" text="Setters" />
-                  <CheckBox id="constructorCheckBox" fx:id="cppStandaloneConstructorCheckBox" mnemonicParsing="false" selected="true" text="Constructor" />
-                  <CheckBox fx:id="cppStandaloneDeleterCheckBox" mnemonicParsing="false" selected="true" text="Deleter" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">

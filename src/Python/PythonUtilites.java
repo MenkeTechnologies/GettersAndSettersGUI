@@ -1,13 +1,14 @@
 package Python;
 
 import mainPackage.Constants;
+import mainPackage.GeneratorAncestor;
 
 import java.util.ArrayList;
 
 /**
  * Created by jacobmenke on 4/1/17.
  */
-public class PythonUtilites {
+public class PythonUtilites{
 
 
     static public String writePythonGettersAndSetters(ArrayList<String> properties, boolean getter, boolean setter, boolean deleter) {

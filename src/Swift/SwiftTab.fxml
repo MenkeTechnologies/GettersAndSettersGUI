@@ -11,9 +11,6 @@
          <children>
             <HBox prefHeight="36.0" prefWidth="600.0">
                <children>
-                  <CheckBox id="gettersCheckBox" fx:id="swiftGetterCheckBox" mnemonicParsing="false" selected="true" text="Getters" />
-                  <CheckBox id="settersCheckBox" fx:id="swiftSetterCheckBox" mnemonicParsing="false" selected="true" text="Setters" />
-                  <CheckBox id="constructorCheckBox" fx:id="swiftConstructorCheckBox" mnemonicParsing="false" selected="true" text="Constructor" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
