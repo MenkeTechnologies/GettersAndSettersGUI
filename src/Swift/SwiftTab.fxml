@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab text="Swift" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Swift.SwiftController">
+   <content>
+      <VBox prefHeight="76.0" prefWidth="600.0">
+         <children>
+            <HBox prefHeight="36.0" prefWidth="600.0">
+               <children>
+                  <CheckBox id="gettersCheckBox" fx:id="swiftGetterCheckBox" mnemonicParsing="false" selected="true" text="Getters" />
+                  <CheckBox id="settersCheckBox" fx:id="swiftSetterCheckBox" mnemonicParsing="false" selected="true" text="Setters" />
+                  <CheckBox id="constructorCheckBox" fx:id="swiftConstructorCheckBox" mnemonicParsing="false" selected="true" text="Constructor" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Input" />
+                  <Region prefHeight="40.0" prefWidth="274.0" />
+                  <Label prefHeight="17.0" prefWidth="50.0" text="Output" />
+               </children>
+            </HBox>
+            <HBox prefHeight="381.0" prefWidth="643.0">
+               <children>
+                  <TextArea fx:id="swiftInputTextArea" prefHeight="293.0" prefWidth="312.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextArea>
+                  <TextArea fx:id="swiftOutputTextArea" prefHeight="288.0" prefWidth="293.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </content>
+</Tab>

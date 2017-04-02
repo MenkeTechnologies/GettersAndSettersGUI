@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="643.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.Controller">
+   <bottom>
+      <HBox prefHeight="18.0" prefWidth="576.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button id="generate" fx:id="generateButton" defaultButton="true" mnemonicParsing="false" onAction="#generateCode" text="Generate" />
+            <Button mnemonicParsing="false" text="Generate With Options" />
+            <Button mnemonicParsing="false" onAction="#clearAll" text="Clear This Tab" />
+            <Button mnemonicParsing="false" onAction="#openSettingsScene" text="Settings" />
+             <CheckBox fx:id="addToClipboardCheckBox" mnemonicParsing="false" selected="true" text="Add To Clipboard" />
+         </children>
+      </HBox>
+   </bottom>
+   <left>
+
+   </left>
+   <center>
+      <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

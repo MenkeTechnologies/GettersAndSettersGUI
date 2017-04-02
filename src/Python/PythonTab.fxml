@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab text="Python" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Python.PythonController">
+   <content>
+      <VBox prefHeight="76.0" prefWidth="600.0">
+         <children>
+            <HBox prefHeight="36.0" prefWidth="600.0">
+               <children>
+                  <CheckBox id="gettersCheckBox" fx:id="pythonGetterCheckBox" mnemonicParsing="false" selected="true" text="Getters" />
+                  <CheckBox id="settersCheckBox" fx:id="pythonSetterCheckBox" mnemonicParsing="false" selected="true" text="Setters" />
+                  <CheckBox id="constructorCheckBox" fx:id="pythonConstructorCheckBox1" mnemonicParsing="false" selected="true" text="Constructor" />
+                  <CheckBox fx:id="pythonDeleterCheckBox" mnemonicParsing="false" selected="true" text="Deleter" />
+                  <RadioButton fx:id="pythonPropertiesRadio" mnemonicParsing="false" text="Properties" />
+                  <RadioButton fx:id="pythonCustomRadio" mnemonicParsing="false" text="Custom" />
+               </children>
+            </HBox>
+            <HBox prefHeight="27.0" prefWidth="646.0">
+               <children>
+                  <Label text="Input" />
+                  <Region prefHeight="40.0" prefWidth="274.0" />
+                  <Label prefHeight="17.0" prefWidth="50.0" text="Output" />
+               </children>
+            </HBox>
+            <HBox prefHeight="338.0" prefWidth="644.0">
+               <children>
+                  <TextArea fx:id="pythonInputTextArea" prefHeight="293.0" prefWidth="312.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextArea>
+                  <TextArea fx:id="pythonOutputTextArea" prefHeight="338.0" prefWidth="332.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </content>
+</Tab>

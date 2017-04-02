@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab text="C++ Implementation" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CppImplementation.CppImplementationController">
+   <content>
+      <VBox prefHeight="76.0" prefWidth="600.0">
+         <children>
+            <HBox prefHeight="36.0" prefWidth="600.0">
+               <children>
+                  <CheckBox id="gettersCheckBox" fx:id="cppImplementationGetterCheckBox" mnemonicParsing="false" selected="true" text="Getters" />
+                  <CheckBox id="settersCheckBox" fx:id="cppImplementationSetterCheckBox" mnemonicParsing="false" selected="true" text="Setters" />
+                  <CheckBox id="constructorCheckBox" fx:id="cppImplementationConstructorCheckBox" mnemonicParsing="false" selected="true" text="Constructor" />
+                  <CheckBox fx:id="cppImplementationDeleterCheckBox" mnemonicParsing="false" selected="true" text="Deleter" />
+               </children>
+            </HBox>
+            <HBox prefHeight="30.0" prefWidth="643.0">
+               <children>
+                  <Label text="Input" />
+                  <Region prefHeight="40.0" prefWidth="274.0" />
+                  <Label prefHeight="17.0" prefWidth="50.0" text="Output" />
+               </children>
+            </HBox>
+            <HBox prefHeight="330.0" prefWidth="643.0">
+               <children>
+                  <TextArea fx:id="cppImplementationInputTextArea" prefHeight="145.0" prefWidth="312.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextArea>
+                  <TextArea fx:id="cppImplementationOutputTextArea" prefHeight="288.0" prefWidth="293.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </content>
+</Tab>
