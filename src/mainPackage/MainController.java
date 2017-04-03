@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -144,11 +145,14 @@ public class MainController implements Initializable {
     }
 
     public void initBindings(Scene scene, ArrayList<LanguageController> languageControllers) {
+
+
         for (int i = 0; i < languageControllers.size(); i++) {
-            languageControllers.get(i).textAreas.get(0).minHeightProperty().bind(scene.heightProperty().multiply(0.8));
-            languageControllers.get(i).textAreas.get(1).minHeightProperty().bind(scene.heightProperty().multiply(0.8));
-            languageControllers.get(i).textAreas.get(0).minWidthProperty().bind(scene.widthProperty().divide(2));
-            languageControllers.get(i).textAreas.get(1).minWidthProperty().bind(scene.widthProperty().divide(2));
+            languageControllers.get(i).mainSplitPane.prefHeightProperty().bind(scene.heightProperty().multiply(0.9));
+            VBox vBox = (VBox)languageControllers.get(i).textAreas.get(0).getParent();
+
+            languageControllers.get(i).textAreas.get(0).prefHeightProperty().bind(vBox.heightProperty());
+            languageControllers.get(i).textAreas.get(1).prefHeightProperty().bind(vBox.heightProperty());
         }
 
         deleterToggleButton.disableProperty().bind(mainTabPane.getSelectionModel().selectedIndexProperty().isNotEqualTo(0));

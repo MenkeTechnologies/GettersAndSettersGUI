@@ -9,27 +9,22 @@
    <content>
       <VBox prefHeight="76.0" prefWidth="600.0">
          <children>
-            <HBox prefHeight="36.0" prefWidth="600.0">
-               <children>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Label text="Input" />
-                  <Region prefHeight="40.0" prefWidth="274.0" />
-                  <Label prefHeight="17.0" prefWidth="50.0" text="Output" />
-               </children>
-            </HBox>
-            <HBox prefHeight="381.0" prefWidth="643.0">
-               <children>
-                  <TextArea fx:id="cppStandaloneInputTextArea" prefHeight="293.0" prefWidth="312.0">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </TextArea>
-                  <TextArea fx:id="cppStandaloneOutputTextArea" prefHeight="288.0" prefWidth="293.0" />
-               </children>
-            </HBox>
+            <SplitPane fx:id="cppStandaloneSplitPane" dividerPositions="0.5016722408026756" prefHeight="408.0" prefWidth="600.0">
+               <items>
+                  <VBox>
+                     <children>
+                        <Label text="Input" />
+                        <TextArea fx:id="cppStandaloneInputTextArea" prefHeight="158.0" prefWidth="315.0" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="322.0" text="Output" />
+                        <TextArea fx:id="cppStandaloneOutputTextArea" prefHeight="158.0" prefWidth="321.0" />
+                     </children>
+                  </VBox>
+               </items>
+            </SplitPane>
          </children>
       </VBox>
    </content>

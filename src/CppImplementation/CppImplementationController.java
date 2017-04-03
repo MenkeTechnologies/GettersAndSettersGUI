@@ -2,6 +2,7 @@ package CppImplementation;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 
@@ -19,10 +20,13 @@ public class CppImplementationController extends LanguageController implements I
     public CheckBox cppImplementationDeleterCheckBox;
     public TextArea cppImplementationInputTextArea;
     public TextArea cppImplementationOutputTextArea;
+    public SplitPane cppImplementationSplitPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         textAreas.addAll(Arrays.asList(cppImplementationInputTextArea, cppImplementationOutputTextArea));
+
+        mainSplitPane =cppImplementationSplitPane;
 
     }
 }

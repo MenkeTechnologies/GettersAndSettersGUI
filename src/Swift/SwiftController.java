@@ -1,6 +1,8 @@
 package Swift;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 import mainPackage.MainUtilities;
@@ -9,6 +11,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
@@ -18,6 +21,7 @@ public class SwiftController extends LanguageController implements Initializable
     public TextArea swiftOutputTextArea;
     public TextArea swiftInputTextArea;
     public SwiftGenerator swiftGenerator;
+    public SplitPane swiftSplitPane;
     int i = 0;
 
     @Override
@@ -31,6 +35,8 @@ public class SwiftController extends LanguageController implements Initializable
                 "    ");
 
         textAreas.addAll(Arrays.asList(swiftInputTextArea, swiftOutputTextArea));
+
+        mainSplitPane = swiftSplitPane;
 
         swiftGenerator = new SwiftGenerator();
     }
@@ -68,7 +74,7 @@ public class SwiftController extends LanguageController implements Initializable
             }
 
             if (selected.get("toString")) {
-                if (!swiftGenerator.toStringProperties.isEmpty()){
+                if (!swiftGenerator.toStringProperties.isEmpty()) {
                     outputText += swiftGenerator.generateToString();
                 }
             }
@@ -88,27 +94,33 @@ public class SwiftController extends LanguageController implements Initializable
     }
 
     private void addPropertiesAlreadySelected(String outputText) {
-
-        for (int i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
-
-            switch (i) {
-                case 0:
-                    swiftGenerator.propertiesArray.get(0).forEach((name,type)->{
-                        if (Pattern.compile("get" + name).matcher(outputText).find()){
-                           System.out.println("we have a getter for " +name + " already...");
-                        }
-                    });
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                default:
-                    break;
-            }
-        }
+//
+//        Scanner myScanner = new Scanner(outputText);
+//
+//        while (myScanner.hasNextLine()){
+//            String line = myScanner.nextLine();
+//            if (Pattern.compile(".*(set|get)"))
+//
+//
+//        }
+//        String type;
+//        for (int i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
+//
+//            if (i == 0){
+//                type = "getter";
+//            } else if (i == 1){
+//                type = "setter";
+//            } else  if (i == 2){
+//                type = "constructor";
+//            }
+//
+//
+//            swiftGenerator.propertiesArray.get(i).forEach((name, type) -> {
+//
+//
+//            });
+//
+//        }
     }
 
     private void clearAllProperties() {

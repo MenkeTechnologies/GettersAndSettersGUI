@@ -2,6 +2,7 @@ package CppHeader;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 
@@ -20,10 +21,12 @@ public class CppHeaderController extends LanguageController implements Initializ
     public CheckBox cppHeaderGenerateImplementationCheckBox;
     public TextArea cppHeaderInputTextArea;
     public TextArea cppHeaderOutputTextArea;
+    public SplitPane cppHeaderSplitPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         textAreas.addAll(Arrays.asList(cppHeaderInputTextArea, cppHeaderOutputTextArea));
+        mainSplitPane = cppHeaderSplitPane;
 
     }
 }

@@ -1,6 +1,7 @@
 package Python;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.SplitPane;
 import mainPackage.MainUtilities;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
@@ -20,6 +21,7 @@ public class PythonController extends LanguageController implements Initializabl
     public RadioButton pythonCustomRadio;
     public TextArea pythonInputTextArea;
     public TextArea pythonOutputTextArea;
+    public SplitPane pythonSplitPane;
     ArrayList<String> properties;
     ArrayList<String> values;
     String className = "";
@@ -36,6 +38,8 @@ public class PythonController extends LanguageController implements Initializabl
                 "    __playFull = True");
 
 
+
+        mainSplitPane = pythonSplitPane;
         textAreas.addAll(Arrays.asList(pythonInputTextArea, pythonOutputTextArea));
     }
 

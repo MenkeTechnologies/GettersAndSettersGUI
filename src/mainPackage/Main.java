@@ -34,6 +34,7 @@ public class Main extends Application {
         Tab swiftTab = swiftLoader.load();
         SwiftController swiftController = swiftLoader.getController();
 
+
         FXMLLoader cppHeaderLoader = new FXMLLoader(CppHeader.CppHeaderController.class.getResource("/CppHeader/CppHeaderTab.fxml"));
         Tab cppHeaderTab = cppHeaderLoader.load();
         CppHeaderController cppHeaderController = cppHeaderLoader.getController();

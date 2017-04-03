@@ -1,5 +1,6 @@
 package mainPackage;
 
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class LanguageController {
 
    protected ArrayList<TextArea> textAreas = new ArrayList<>();
-
+   public SplitPane mainSplitPane;
     void test(){
         System.out.println("testing");
     }
