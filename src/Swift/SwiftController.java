@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 /**
  * Created by jacobmenke on 4/1/17.
@@ -17,6 +18,7 @@ public class SwiftController extends LanguageController implements Initializable
     public TextArea swiftOutputTextArea;
     public TextArea swiftInputTextArea;
     public SwiftGenerator swiftGenerator;
+    int i = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -33,7 +35,7 @@ public class SwiftController extends LanguageController implements Initializable
         swiftGenerator = new SwiftGenerator();
     }
 
-    public String generateSwift(HashMap<String, Boolean> selected, boolean dialog) {
+    public String generateSwift(HashMap<String, Boolean> selected, boolean dialog, String previousOutputText) {
 
         String outputText = "";
 
@@ -41,12 +43,18 @@ public class SwiftController extends LanguageController implements Initializable
 
         if (!className.equals(null)) {
 
-            if (dialog)
-                MainUtilities.askForProperties(swiftGenerator.properties, selected);
+            if (dialog) {
+                clearAllProperties();
+                MainUtilities.askForProperties(swiftGenerator.properties, swiftGenerator.propertiesArray, selected);
+                addPropertiesAlreadySelected(previousOutputText);
+            } else {
+                initAllProperties();
+            }
 
             outputText += swiftGenerator.generateClassDeclaration(className);
 
             if (selected.get("constructor")) {
+
                 outputText += swiftGenerator.generateConstructor();
             }
 
@@ -59,16 +67,18 @@ public class SwiftController extends LanguageController implements Initializable
                 outputText += swiftGenerator.generateSetters();
             }
 
-
-
             if (selected.get("toString")) {
-                outputText += swiftGenerator.generateToString();
+                if (!swiftGenerator.toStringProperties.isEmpty()){
+                    outputText += swiftGenerator.generateToString();
+                }
             }
 
             outputText += swiftGenerator.generateClassEnding();
         }
 
-        swiftOutputTextArea.setText(outputText);
+        if (!swiftGenerator.properties.isEmpty()) {
+            swiftOutputTextArea.setText(outputText);
+        }
 
         if (selected.get("clipboard")) {
             MainUtilities.copyToClipboard(outputText);
@@ -77,7 +87,46 @@ public class SwiftController extends LanguageController implements Initializable
         return outputText;
     }
 
-    public void generateSwiftWithOptions(HashMap<String, Boolean> options) {
-        generateSwift(options, true);
+    private void addPropertiesAlreadySelected(String outputText) {
+
+        for (int i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
+
+            switch (i) {
+                case 0:
+                    swiftGenerator.propertiesArray.get(0).forEach((name,type)->{
+                        if (Pattern.compile("get" + name).matcher(outputText).find()){
+                           System.out.println("we have a getter for " +name + " already...");
+                        }
+                    });
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void clearAllProperties() {
+        for (i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
+            swiftGenerator.propertiesArray.get(i).clear();
+        }
+    }
+
+    private void initAllProperties() {
+        for (i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
+            swiftGenerator.propertiesArray.get(i).clear();
+            swiftGenerator.properties.forEach((name, type) -> {
+                swiftGenerator.propertiesArray.get(i).put(name, type);
+            });
+        }
+    }
+
+    public void generateSwiftWithOptions(HashMap<String, Boolean> options, String outputText) {
+        generateSwift(options, true, outputText);
     }
 }

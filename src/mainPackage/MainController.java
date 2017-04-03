@@ -63,31 +63,48 @@ public class MainController implements Initializable {
 
     public void clearAll(ActionEvent actionEvent) {
 
+        deleteText("both");
+    }
+
+    void deleteText(String option) {
+
         switch (mainTabPane.getSelectionModel().getSelectedIndex()) {
             case 0:
-                removeText(pythonController);
+                removeText(pythonController, option);
                 break;
             case 1:
-                removeText(swiftController);
+                removeText(swiftController, option);
                 break;
             case 2:
-                removeText(cppHeaderController);
+                removeText(cppHeaderController, option);
                 break;
             case 3:
-                removeText(cppImplementationController);
+                removeText(cppImplementationController, option);
                 break;
             case 4:
-                removeText(cppStandaloneController);
+                removeText(cppStandaloneController, option);
                 break;
             default:
                 break;
         }
     }
 
-    private void removeText(LanguageController lc) {
+    private void removeText(LanguageController lc, String option) {
         LanguageController languageController = lc;
-        languageController.textAreas.get(0).setText("");
-        languageController.textAreas.get(1).setText("");
+
+        switch (option) {
+            case "left":
+                languageController.textAreas.get(0).setText("");
+                break;
+            case "right":
+                languageController.textAreas.get(1).setText("");
+                break;
+            case "both":
+                languageController.textAreas.get(0).setText("");
+                languageController.textAreas.get(1).setText("");
+            default:
+                break;
+        }
     }
 
     public void openSettingsScene(ActionEvent actionEvent) {
@@ -110,7 +127,7 @@ public class MainController implements Initializable {
                 pythonController.generatePython(options);
                 break;
             case 1:
-                swiftController.generateSwift(options, false);
+                swiftController.generateSwift(options, false, null);
                 break;
             default:
                 System.out.println("error in tab selection...");
@@ -145,10 +162,18 @@ public class MainController implements Initializable {
                 pythonController.generatePythonWithOptions(options);
                 break;
             case 1:
-                swiftController.generateSwiftWithOptions(options);
+                swiftController.generateSwiftWithOptions(options, languageControllers.get(1).textAreas.get(1).getText());
                 break;
             default:
                 System.out.println("error in tab selection...");
         }
+    }
+
+    public void clearRight(ActionEvent actionEvent) {
+        deleteText("right");
+    }
+
+    public void clearLeft(ActionEvent actionEvent) {
+        deleteText("left");
     }
 }

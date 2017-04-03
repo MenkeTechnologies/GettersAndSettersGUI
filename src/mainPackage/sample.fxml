@@ -16,8 +16,12 @@
          <children>
             <Button id="generate" fx:id="generateButton" defaultButton="true" mnemonicParsing="false" onAction="#generateCode" text="Generate" />
             <Button mnemonicParsing="false" text="Generate With Options" onAction="#generateCodeWithOptions" />
-            <Button mnemonicParsing="false" onAction="#clearAll" text="Clear This Tab" />
-            <Button mnemonicParsing="false" onAction="#openSettingsScene" text="Settings" />
+            <Button mnemonicParsing="false" onAction="#clearAll" text="Clear Both" />
+             <Button mnemonicParsing="false" onAction="#clearLeft" text="Clear Left" />
+
+             <Button mnemonicParsing="false" onAction="#clearRight" text="Clear Right" />
+
+             <Button mnemonicParsing="false" onAction="#openSettingsScene" text="Settings" />
          </children>
       </HBox>
    </bottom>

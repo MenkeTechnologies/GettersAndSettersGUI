@@ -111,7 +111,7 @@ public class SwiftGenerator extends GeneratorAncestor {
 
         StringBuilder sb = new StringBuilder();
 
-        properties.forEach((name, type) -> {
+        getterProperties.forEach((name, type) -> {
 
             sb.append(FOUR_SPACES).append("func get").append(capitalizeFirstLetter(name)).append("() -> ").append(type).append(" {\n")
                     .append(FOUR_SPACES).append(FOUR_SPACES).append("return self.").append(name)
@@ -124,7 +124,7 @@ public class SwiftGenerator extends GeneratorAncestor {
     @Override
     public String generateSetters() {
         StringBuilder sb = new StringBuilder();
-        properties.forEach((name, type) -> {
+        setterProperties.forEach((name, type) -> {
 
             sb.append(FOUR_SPACES).append("func set").append(capitalizeFirstLetter(name)).append("(").append(name).append(" : ").append(type).append("){\n")
                     .append(FOUR_SPACES).append(FOUR_SPACES).append("self.").append(name)
@@ -140,15 +140,17 @@ public class SwiftGenerator extends GeneratorAncestor {
 
         sb.append(FOUR_SPACES).append("init(");
 
-        properties.forEach((name, type) -> {
+        constructorProperties.forEach((name, type) -> {
             sb.append(name).append(": ").append(type).append(", ");
         });
 
-        sb.setLength(sb.length() - 2);
+        if (!constructorProperties.isEmpty()){
+            sb.setLength(sb.length() - 2);
+        }
 
         sb.append("){\n");
 
-        properties.forEach((name, type) -> {
+        constructorProperties.forEach((name, type) -> {
             sb.append(FOUR_SPACES).append(FOUR_SPACES).append("self.").append(name).append(" = ").append(name).append("\n");
         });
         sb.append(FOUR_SPACES).append("}").append("\n");
@@ -163,7 +165,7 @@ public class SwiftGenerator extends GeneratorAncestor {
 
         sb.append(FOUR_SPACES).append(FOUR_SPACES).append("return \"");
 
-        properties.forEach((name, type) -> {
+        toStringProperties.forEach((name, type) -> {
             sb.append(name).append(" = \\(self.").append(name).append("), ");
         });
 
