@@ -7,14 +7,19 @@ import CppImplementation.CppImplementationController;
 import CppStandalone.CppStandaloneController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +113,19 @@ public class MainController implements Initializable {
         }
     }
 
-    public void openSettingsScene(ActionEvent actionEvent) {
+    public void openSettingsScene(ActionEvent actionEvent) throws IOException {
+        Stage settingsWindow = new Stage();
+
+        FXMLLoader settingsLoader = new FXMLLoader(MainController.class.getResource("/mainPackage/setting.fxml"));
+        settingsLoader.setLocation(getClass().getResource("/mainPackage/settings.fxml"));
+        BorderPane root = settingsLoader.load();
+
+        Scene scene = new Scene(root);
+
+        settingsWindow.setScene(scene);
+        settingsWindow.initModality(Modality.APPLICATION_MODAL);
+        settingsWindow.setTitle("Settings");
+        settingsWindow.show();
     }
 
     void getOptions() {

@@ -5,7 +5,7 @@ package mainPackage;
  */
 public class Constants {
 
-    public static  final String FOUR_SPACES = "    ";
+    public static   String FOUR_SPACES = "    ";
 
 
 }
