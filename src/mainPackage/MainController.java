@@ -163,10 +163,9 @@ public class MainController implements Initializable {
 
     public void initBindings(Scene scene, ArrayList<LanguageController> languageControllers) {
 
-
         for (int i = 0; i < languageControllers.size(); i++) {
             languageControllers.get(i).mainSplitPane.prefHeightProperty().bind(scene.heightProperty().multiply(0.9));
-            VBox vBox = (VBox)languageControllers.get(i).textAreas.get(0).getParent();
+            VBox vBox = (VBox) languageControllers.get(i).textAreas.get(0).getParent();
 
             languageControllers.get(i).textAreas.get(0).prefHeightProperty().bind(vBox.heightProperty());
             languageControllers.get(i).textAreas.get(1).prefHeightProperty().bind(vBox.heightProperty());
