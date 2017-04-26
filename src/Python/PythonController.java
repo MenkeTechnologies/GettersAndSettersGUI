@@ -105,7 +105,7 @@ public class PythonController extends LanguageController implements Initializabl
             }
 
         } else {
-            MainUtilities.generateAlert();
+            MainUtilities.generateAlert("Duplicate Properties Found.");
         }
     }
 

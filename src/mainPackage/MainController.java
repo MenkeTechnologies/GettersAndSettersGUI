@@ -24,6 +24,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
 public class MainController implements Initializable {
     public TabPane mainTabPane;
@@ -55,7 +56,6 @@ public class MainController implements Initializable {
 
         getterToggleButton.setSelected(true);
         setterToggleButton.setSelected(true);
-        constructorToggleButton.setSelected(true);
         toStringToggleButton.setSelected(true);
 
         //**********************************************************************
@@ -139,16 +139,31 @@ public class MainController implements Initializable {
 
     public void generateCode(ActionEvent actionEvent) {
         getOptions();
+        try {
+            switch (mainTabPane.getSelectionModel().getSelectedIndex()) {
 
-        switch (mainTabPane.getSelectionModel().getSelectedIndex()) {
-            case 0:
-                pythonController.generatePython(options);
-                break;
-            case 1:
-                swiftController.generateSwift(options, false, null);
-                break;
-            default:
-                System.out.println("error in tab selection...");
+                case 0:
+                    pythonController.generatePython(options);
+                    break;
+                case 1:
+
+                    swiftController.generateSwift(options, false, "");
+                    break;
+                case 2:
+                    cppHeaderController.generateCppHeader(options, false, "");
+                    break;
+                case 3:
+                    cppImplementationController.generateCppImplementation(options, false, "");
+                    break;
+                case 4:
+                    cppStandaloneController.generateCppStandalone(options, false, "");
+                    break;
+
+                default:
+                    System.out.println("error in tab selection...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -177,15 +192,20 @@ public class MainController implements Initializable {
     public void generateCodeWithOptions(ActionEvent actionEvent) {
         getOptions();
 
-        switch (mainTabPane.getSelectionModel().getSelectedIndex()) {
-            case 0:
-                pythonController.generatePythonWithOptions(options);
-                break;
-            case 1:
-                swiftController.generateSwiftWithOptions(options, languageControllers.get(1).textAreas.get(1).getText());
-                break;
-            default:
-                System.out.println("error in tab selection...");
+        try {
+            switch (mainTabPane.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    pythonController.generatePythonWithOptions(options);
+                    break;
+                case 1:
+                    swiftController.generateSwiftWithOptions(options, languageControllers.get(1).textAreas.get(1).getText());
+                    break;
+                default:
+                    System.out.println("error in tab selection...");
+            }
+        } catch (Exception e) {
+            System.err.println("___________" + Thread.currentThread().getStackTrace()[1].getClassName() + "____Line:" + Thread.currentThread().getStackTrace()[1].getLineNumber() +
+                    "___ exiting");
         }
     }
 

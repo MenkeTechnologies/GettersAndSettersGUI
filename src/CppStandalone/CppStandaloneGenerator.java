@@ -1,18 +1,18 @@
-package Python;
+package CppStandalone;
 
 import mainPackage.GeneratorAncestor;
 
 /**
- * Created by jacobmenke on 4/2/17.
+ * Created by jacobmenke on 4/25/17.
  */
-public class PythonGenerator extends GeneratorAncestor {
+public class CppStandaloneGenerator extends GeneratorAncestor {
     @Override
     public String generateClassDeclaration(String className) {
         return null;
     }
 
     @Override
-    public String parseProperties(String text) {
+    public String parseProperties(String text) throws Exception {
         return null;
     }
 

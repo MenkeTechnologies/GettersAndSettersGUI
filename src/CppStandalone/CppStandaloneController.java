@@ -5,9 +5,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
+import mainPackage.MainUtilities;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 /**
@@ -21,6 +23,7 @@ public class CppStandaloneController extends LanguageController implements Initi
     public TextArea cppStandaloneInputTextArea;
     public TextArea cppStandaloneOutputTextArea;
     public SplitPane cppStandaloneSplitPane;
+    public CppStandaloneGenerator cppStandaloneGenerator;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -28,5 +31,12 @@ public class CppStandaloneController extends LanguageController implements Initi
 
         mainSplitPane = cppStandaloneSplitPane;
 
+        cppStandaloneGenerator = new CppStandaloneGenerator();
+
+        MainUtilities.clearAllMaps(cppStandaloneGenerator);
+
+    }
+
+    public void generateCppStandalone(HashMap<String, Boolean> options, boolean b, String s) {
     }
 }

@@ -1,7 +1,5 @@
 package mainPackage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -16,10 +14,10 @@ abstract public class GeneratorAncestor {
     public LinkedHashMap<String, String> setterProperties = new LinkedHashMap<>();
     public LinkedHashMap<String, String> constructorProperties = new LinkedHashMap<>();
     public LinkedHashMap<String, String> toStringProperties = new LinkedHashMap<>();
-    public ArrayList<LinkedHashMap<String, String>> propertiesArray = new ArrayList<>();
+    public LinkedHashMap<String,LinkedHashMap<String, String>> methodTypeAndPropertiesMap = new LinkedHashMap<>();
 
     public GeneratorAncestor() {
-        propertiesArray.addAll(Arrays.asList(getterProperties, setterProperties, constructorProperties, toStringProperties));
+
     }
 
     protected HashMap<String, String> initialValues = new HashMap<>();
@@ -29,7 +27,9 @@ abstract public class GeneratorAncestor {
 
     public abstract String generateClassDeclaration(String className);
 
-    public abstract String parseProperties(String text);
+    public abstract String parseProperties(String text) throws Exception;
+
+    public abstract void filterOutPropertiesAlreadyPresent(String outputText);
 
     public abstract String generateGetters();
 

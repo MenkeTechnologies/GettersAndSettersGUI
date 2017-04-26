@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GettersAndSettersGUI:jar">
+    <output-path>$USER_HOME$/Desktop</output-path>
+    <root id="archive" name="GettersAndSettersGUI.jar">
+      <element id="module-output" name="GettersAndSettersGUI" />
+    </root>
+  </artifact>
+</component>

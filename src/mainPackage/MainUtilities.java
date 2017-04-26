@@ -1,5 +1,6 @@
 package mainPackage;
 
+import Swift.SwiftGenerator;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -7,10 +8,7 @@ import javafx.scene.layout.VBox;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by jacobmenke on 4/1/17.
@@ -18,7 +16,103 @@ import java.util.Optional;
 public class MainUtilities {
     static String output = "";
 
-    public static void askForProperties(LinkedHashMap<String, String> properties, ArrayList<LinkedHashMap<String, String>> propertiesArray, HashMap<String, Boolean> selected) {
+    static private void fillMainHashMapWithAllNamesAndTypes(GeneratorAncestor generatorAncestor) {
+        generatorAncestor.methodTypeAndPropertiesMap.put("getter", generatorAncestor.properties);
+        generatorAncestor.methodTypeAndPropertiesMap.put("setter", generatorAncestor.properties);
+        generatorAncestor.methodTypeAndPropertiesMap.put("constructor", generatorAncestor.properties);
+        generatorAncestor.methodTypeAndPropertiesMap.put("toString", generatorAncestor.properties);
+    }
+
+
+    public static String mainRoutine(HashMap<String, Boolean> selected, boolean dialog, String previousOutputText, LanguageController languageController, GeneratorAncestor languageGenerator) throws Exception{
+
+            String outputText = "";
+
+            MainUtilities.clearAllMaps(languageGenerator);
+
+            try {
+                //props stored as name, type in swiftgenerator.properties map
+                languageController.className = languageGenerator.parseProperties(languageController.textAreas.get(0).getText());
+            } catch (Exception e) {
+                throw new Exception();
+            }
+            if (!languageController.className.equals(null)) {
+
+                if (dialog) {
+                    if (!previousOutputText.equals("")) {
+                        fillMainHashMapWithAllNamesAndTypes(languageGenerator);
+                        //props already present go into swiftgenerator.setterproperites
+                        //props not present go into main hash map
+                        languageGenerator.filterOutPropertiesAlreadyPresent(previousOutputText);
+
+                    } else {
+                        languageGenerator.toStringProperties.clear();
+                        fillMainHashMapWithAllNamesAndTypes(languageGenerator);
+
+                    }
+
+                    MainUtilities.askForProperties(languageGenerator.methodTypeAndPropertiesMap, selected, languageGenerator);
+                } else {
+                    //put in to main hash map all names and type
+                    fillMainHashMapWithAllNamesAndTypes(languageGenerator);
+                    languageGenerator.setterProperties.putAll(languageGenerator.methodTypeAndPropertiesMap.get("setter"));
+                    languageGenerator.getterProperties.putAll(languageGenerator.methodTypeAndPropertiesMap.get("getter"));
+                    languageGenerator.constructorProperties.putAll(languageGenerator.methodTypeAndPropertiesMap.get("constructor"));
+                    languageGenerator.toStringProperties.putAll(languageGenerator.methodTypeAndPropertiesMap.get("toString"));
+                }
+
+                outputText += languageGenerator.generateClassDeclaration(languageController.className);
+
+                if (selected.get("constructor")) {
+
+                    outputText += languageGenerator.generateConstructor();
+                }
+
+                if (selected.get("getter")) {
+
+                    //generate getters based on getters hashmap
+                    outputText += languageGenerator.generateGetters();
+                }
+
+                if (selected.get("setter")) {
+                    outputText += languageGenerator.generateSetters();
+                }
+
+                if (selected.get("toString")) {
+                    if (!languageGenerator.toStringProperties.isEmpty()) {
+                        outputText += languageGenerator.generateToString();
+                    }
+                }
+
+                outputText += languageGenerator.generateClassEnding();
+            }
+
+            if (!languageGenerator.properties.isEmpty()) {
+                languageController.textAreas.get(1).setText(outputText);
+            }
+
+            if (selected.get("clipboard")) {
+                MainUtilities.copyToClipboard(outputText);
+            }
+
+            return outputText;
+        }
+
+
+
+
+
+
+    public static void clearAllMaps(GeneratorAncestor generatorAncestor) {
+        generatorAncestor.properties.clear();
+        generatorAncestor.methodTypeAndPropertiesMap.clear();
+        generatorAncestor.getterProperties.clear();
+        generatorAncestor.setterProperties.clear();
+        generatorAncestor.constructorProperties.clear();
+        generatorAncestor.toStringProperties.clear();
+    }
+
+    public static void askForProperties(LinkedHashMap<String, LinkedHashMap<String, String>> methodTypeAndPropertiesMap, HashMap<String, Boolean> selected, GeneratorAncestor generatorAncestor) throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
         VBox propertiesVBox = new VBox();
@@ -30,7 +124,7 @@ public class MainUtilities {
 
             propertiesVBox.getChildren().add(getter);
 
-            properties.forEach((name, type) -> {
+            methodTypeAndPropertiesMap.get("getter").forEach((name, type) -> {
                 CheckBox checkBox = new CheckBox(name);
                 checkBox.setSelected(true);
                 propertiesCheckBoxes.put(checkBox, "getter");
@@ -42,7 +136,7 @@ public class MainUtilities {
             Label getter = new Label("Setter");
             propertiesVBox.getChildren().add(getter);
 
-            properties.forEach((name, type) -> {
+            methodTypeAndPropertiesMap.get("setter").forEach((name, type) -> {
                 CheckBox checkBox = new CheckBox(name);
                 checkBox.setSelected(true);
                 propertiesCheckBoxes.put(checkBox, "setter");
@@ -54,7 +148,7 @@ public class MainUtilities {
             Label getter = new Label("Constructor");
             propertiesVBox.getChildren().add(getter);
 
-            properties.forEach((name, type) -> {
+            methodTypeAndPropertiesMap.get("constructor").forEach((name, type) -> {
                 CheckBox checkBox = new CheckBox(name);
                 checkBox.setSelected(true);
                 propertiesCheckBoxes.put(checkBox, "constructor");
@@ -65,7 +159,7 @@ public class MainUtilities {
             Label getter = new Label("toString");
             propertiesVBox.getChildren().add(getter);
 
-            properties.forEach((name, type) -> {
+            methodTypeAndPropertiesMap.get("toString").forEach((name, type) -> {
                 CheckBox checkBox = new CheckBox(name);
                 propertiesCheckBoxes.put(checkBox, "toString");
                 checkBox.setSelected(true);
@@ -77,14 +171,14 @@ public class MainUtilities {
         Button selectAll = new Button("Select All");
         Button selectNone = new Button("Select None");
 
-        selectAll.setOnAction(e->{
-            propertiesCheckBoxes.forEach((cb,str)->{
+        selectAll.setOnAction(e -> {
+            propertiesCheckBoxes.forEach((cb, str) -> {
                 cb.setSelected(true);
             });
         });
 
-        selectNone.setOnAction(e->{
-            propertiesCheckBoxes.forEach((cb,str)->{
+        selectNone.setOnAction(e -> {
+            propertiesCheckBoxes.forEach((cb, str) -> {
                 cb.setSelected(false);
             });
         });
@@ -103,16 +197,33 @@ public class MainUtilities {
                     if (theCheckbox.isSelected()) {
                         switch (propertiesCheckBoxes.get(theCheckbox)) {
                             case "getter":
-                                propertiesArray.get(0).put(theCheckbox.getText(), properties.get(theCheckbox.getText()));
+                                if (theCheckbox.isSelected()) {
+                                    Map<String, String> getterMap = methodTypeAndPropertiesMap.get("getter");
+
+                                    generatorAncestor.getterProperties.put(theCheckbox.getText(), getterMap.get(theCheckbox.getText()));
+                                }
                                 break;
                             case "setter":
-                                propertiesArray.get(1).put(theCheckbox.getText(), properties.get(theCheckbox.getText()));
+                                if (theCheckbox.isSelected()) {
+                                    Map<String, String> setterMap = methodTypeAndPropertiesMap.get("setter");
+
+                                    generatorAncestor.setterProperties.put(theCheckbox.getText(), setterMap.get(theCheckbox.getText()));
+                                }
                                 break;
                             case "constructor":
-                                propertiesArray.get(2).put(theCheckbox.getText(), properties.get(theCheckbox.getText()));
+                                if (theCheckbox.isSelected()) {
+                                    Map<String, String> constructorMap = methodTypeAndPropertiesMap.get("constructor");
+
+                                    generatorAncestor.constructorProperties.put(theCheckbox.getText(), constructorMap.get(theCheckbox.getText()));
+                                }
                                 break;
                             case "toString":
-                                propertiesArray.get(3).put(theCheckbox.getText(), properties.get(theCheckbox.getText()));
+
+                                if (theCheckbox.isSelected()) {
+                                    Map<String, String> toStringMap = methodTypeAndPropertiesMap.get("toString");
+
+                                    generatorAncestor.toStringProperties.put(theCheckbox.getText(), toStringMap.get(theCheckbox.getText()));
+                                }
                                 break;
                             default:
                                 System.out.println("bad key at properties of Vbox");
@@ -120,9 +231,14 @@ public class MainUtilities {
                     }
                 }
             });
+
+            if (generatorAncestor.toStringProperties.isEmpty()){
+                generatorAncestor.toStringProperties = SwiftGenerator.previousToStringMap;
+            }
+
         } else {
 
-            properties.clear();
+            throw new Exception("Done");
         }
     }
 
@@ -132,9 +248,9 @@ public class MainUtilities {
         clipboard.setContents(stringSelection, stringSelection);
     }
 
-    public static void generateAlert() {
+    public static void generateAlert(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("No properties found");
+        alert.setContentText(error);
         alert.showAndWait();
     }
 

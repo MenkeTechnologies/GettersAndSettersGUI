@@ -1,17 +1,13 @@
 package Swift;
 
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import mainPackage.LanguageController;
 import mainPackage.MainUtilities;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -23,16 +19,31 @@ public class SwiftController extends LanguageController implements Initializable
     public SwiftGenerator swiftGenerator;
     public SplitPane swiftSplitPane;
     int i = 0;
+    static LinkedHashMap<String, String> outputMap = new LinkedHashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        swiftInputTextArea.setText("class Dog{\n" +
-                "    var name : String = \"dogs\"\n" +
-                "    var age : Int\n" +
-                "    var weight : Int = 55\n" +
-                "    var cool : Double\n" +
-                "    ");
+        swiftInputTextArea.setText("var str = \"Hello, playground\"\n" +
+                "\n" +
+                "\n" +
+                "                           class Dog{var\n" +
+                "                            \n" +
+                "                            \n" +
+                "                            \n" +
+                "                            \n" +
+                "                            \n" +
+                "                            name\n" +
+                "                                \n" +
+                "                                :\n" +
+                "                                \n" +
+                "                                \n" +
+                "                                \n" +
+                "                            String=\"dogs are cool\" ; var age : Int = 25\n" +
+                "    var weight:Int = 55\n" +
+                "    var cool : Double = 2.5\n" +
+                "    \n" +
+                "}");
 
         textAreas.addAll(Arrays.asList(swiftInputTextArea, swiftOutputTextArea));
 
@@ -41,104 +52,132 @@ public class SwiftController extends LanguageController implements Initializable
         swiftGenerator = new SwiftGenerator();
     }
 
-    public String generateSwift(HashMap<String, Boolean> selected, boolean dialog, String previousOutputText) {
+    public String generateSwift(HashMap<String, Boolean> selected, boolean dialog, String previousOutputText) throws Exception {
 
-        String outputText = "";
+        return MainUtilities.mainRoutine(selected, dialog, previousOutputText, this, swiftGenerator);
+    }
 
-        String className = swiftGenerator.parseProperties(swiftInputTextArea.getText());
+     void filterOutPropertiesAlreadyPresent(String outputText) {
 
-        if (!className.equals(null)) {
+        LinkedHashMap<String, LinkedHashMap<String, String>> methodTypeAndPropertiesMapFinal = new LinkedHashMap<>();
 
-            if (dialog) {
-                clearAllProperties();
-                MainUtilities.askForProperties(swiftGenerator.properties, swiftGenerator.propertiesArray, selected);
-                addPropertiesAlreadySelected(previousOutputText);
+        swiftGenerator.methodTypeAndPropertiesMap.forEach((methodType, propertiesMap) -> {
+
+            switch (methodType) {
+                case "getter":
+                    propertiesMap.forEach((propertyName, propertyType) -> {
+                        createMapFromTextGetterSetter(outputText, propertyName, propertyType, "get", outputMap);
+                    });
+                    methodTypeAndPropertiesMapFinal.put("getter", new LinkedHashMap<>(outputMap));
+                    outputMap.clear();
+
+                    break;
+                case "setter":
+                    propertiesMap.forEach((propertyName, propertyType) -> {
+                        createMapFromTextGetterSetter(outputText, propertyName, propertyType, "set", outputMap);
+                    });
+                    methodTypeAndPropertiesMapFinal.put("setter", new LinkedHashMap<>(outputMap));
+                    outputMap.clear();
+                    break;
+                case "constructor":
+                    propertiesMap.forEach((propertyName, propertyType) -> {
+                        outputMap = createMapFromTextConstructor(outputText, propertyName, propertyType);
+                    });
+
+                    methodTypeAndPropertiesMapFinal.put("constructor", new LinkedHashMap<>(outputMap));
+                    outputMap.clear();
+                    break;
+                case "toString":
+                    //just search for toString, if present then add to existingToString
+                    propertiesMap.forEach((propertyName, propertyType) -> {
+                        createMapFromTextGetterSetter(outputText, propertyName, propertyType, "toString", outputMap);
+                    });
+                    methodTypeAndPropertiesMapFinal.put("toString", new LinkedHashMap<>(propertiesMap));
+                    outputMap.clear();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        swiftGenerator.methodTypeAndPropertiesMap = methodTypeAndPropertiesMapFinal;
+    }
+
+    private LinkedHashMap<String, String> createMapFromTextConstructor(String outputText, String propertyName, String propertyType) {
+        LinkedHashMap<String, String> outputMap = new LinkedHashMap<>();
+
+        boolean match = false;
+
+        Scanner myScanner = new Scanner(outputText);
+
+        while (myScanner.hasNextLine()) {
+            String line = myScanner.nextLine();
+            Pattern pattern = Pattern.compile(".*init.*()");
+
+            if (pattern.matcher(line).matches()) {
+                match = true;
+                break;
+            }
+        }
+
+        if (!match) {
+            outputMap.put(propertyName, propertyType);
+        }
+
+        return outputMap;
+    }
+
+    private LinkedHashMap<String, String> createMapFromTextGetterSetter(String outputText, String propertyName, String propertyType, String type, LinkedHashMap<String, String> outputMap) {
+
+        boolean match = false;
+
+        Scanner myScanner = new Scanner(outputText);
+
+        String UppercaseFirstLetterName = MainUtilities.capitalizeFirstLetter(propertyName);
+
+        while (myScanner.hasNextLine()) {
+            String line = myScanner.nextLine();
+            Pattern pattern = null;
+            if (type.equals("toString")) {
+                pattern = Pattern.compile(".*" + type + ".*");
             } else {
-                initAllProperties();
+                pattern = Pattern.compile(".*" + type + UppercaseFirstLetterName + ".*");
             }
 
-            outputText += swiftGenerator.generateClassDeclaration(className);
-
-            if (selected.get("constructor")) {
-
-                outputText += swiftGenerator.generateConstructor();
-            }
-
-            if (selected.get("getter")) {
-
-                outputText += swiftGenerator.generateGetters();
-            }
-
-            if (selected.get("setter")) {
-                outputText += swiftGenerator.generateSetters();
-            }
-
-            if (selected.get("toString")) {
-                if (!swiftGenerator.toStringProperties.isEmpty()) {
-                    outputText += swiftGenerator.generateToString();
+            if (pattern.matcher(line).matches()) {
+                match = true;
+                if (type.equals("get")) {
+                    swiftGenerator.getterProperties.put(propertyName, propertyType);
+                } else if (type.equals("set")) {
+                    swiftGenerator.setterProperties.put(propertyName, propertyType);
+                } else {
+                    SwiftGenerator.toStringPresent = true;
+                    break;
                 }
+                break;
             }
-
-            outputText += swiftGenerator.generateClassEnding();
         }
 
-        if (!swiftGenerator.properties.isEmpty()) {
-            swiftOutputTextArea.setText(outputText);
+        if (!match) {
+            outputMap.put(propertyName, propertyType);
         }
 
-        if (selected.get("clipboard")) {
-            MainUtilities.copyToClipboard(outputText);
-        }
-
-        return outputText;
+        return outputMap;
     }
 
-    private void addPropertiesAlreadySelected(String outputText) {
-//
-//        Scanner myScanner = new Scanner(outputText);
-//
-//        while (myScanner.hasNextLine()){
-//            String line = myScanner.nextLine();
-//            if (Pattern.compile(".*(set|get)"))
-//
-//
-//        }
-//        String type;
-//        for (int i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
-//
-//            if (i == 0){
-//                type = "getter";
-//            } else if (i == 1){
-//                type = "setter";
-//            } else  if (i == 2){
-//                type = "constructor";
-//            }
-//
-//
-//            swiftGenerator.propertiesArray.get(i).forEach((name, type) -> {
-//
-//
-//            });
-//
-//        }
+    private void clearMainHashMap() {
+
+        swiftGenerator.methodTypeAndPropertiesMap.clear();
     }
 
-    private void clearAllProperties() {
-        for (i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
-            swiftGenerator.propertiesArray.get(i).clear();
-        }
+    private void fillMainHashMapWithAllNamesAndTypes() {
+        swiftGenerator.methodTypeAndPropertiesMap.put("getter", swiftGenerator.properties);
+        swiftGenerator.methodTypeAndPropertiesMap.put("setter", swiftGenerator.properties);
+        swiftGenerator.methodTypeAndPropertiesMap.put("constructor", swiftGenerator.properties);
+        swiftGenerator.methodTypeAndPropertiesMap.put("toString", swiftGenerator.properties);
     }
 
-    private void initAllProperties() {
-        for (i = 0; i < swiftGenerator.propertiesArray.size(); i++) {
-            swiftGenerator.propertiesArray.get(i).clear();
-            swiftGenerator.properties.forEach((name, type) -> {
-                swiftGenerator.propertiesArray.get(i).put(name, type);
-            });
-        }
-    }
-
-    public void generateSwiftWithOptions(HashMap<String, Boolean> options, String outputText) {
+    public void generateSwiftWithOptions(HashMap<String, Boolean> options, String outputText) throws Exception {
         generateSwift(options, true, outputText);
     }
 }

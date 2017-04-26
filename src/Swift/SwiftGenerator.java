@@ -1,12 +1,13 @@
 package Swift;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import mainPackage.Constants;
 import mainPackage.GeneratorAncestor;
+import mainPackage.MainUtilities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static mainPackage.Constants.FOUR_SPACES;
 import static mainPackage.MainUtilities.capitalizeFirstLetter;
@@ -15,6 +16,12 @@ import static mainPackage.MainUtilities.capitalizeFirstLetter;
  * Created by jacobmenke on 4/1/17.
  */
 public class SwiftGenerator extends GeneratorAncestor {
+
+    public static boolean toStringPresent = false;
+
+    public  static LinkedHashMap<String, String> previousToStringMap = new LinkedHashMap<>();
+
+
     @Override
     public String generateClassDeclaration(String className) {
 
@@ -38,64 +45,177 @@ public class SwiftGenerator extends GeneratorAncestor {
         return sb.toString();
     }
 
-    @Override
-    public String parseProperties(String text) {
-        properties.clear();
+    public static void main(String[] args) {
 
-        String className = null;
+        String text = "\n" +
+                "import UIKit\n" +
+                "\n" +
+                "var str = \"Hello, playground\"\n" +
+                "\n" +
+                "\n" +
+                "                           class Dog{var\n" +
+                "                            \n" +
+                "                            \n" +
+                "                            \n" +
+                "                            \n" +
+                "                            \n" +
+                "                            name\n" +
+                "                                \n" +
+                "                                :\n" +
+                "                                \n" +
+                "                                \n" +
+                "                                \n" +
+                "                            String = \"dogs are cool\" ;\n" +
+                "                            \n" +
+                "                            var age : Int = 25\n" +
+                "    var weight : Int = 55\n" +
+                "    var cool : Double = 2.5\n;var sex : CLLocation = 25" +
+                "    \n" +
+                "}";
 
-        boolean inClassDef = false;
-
-        try (Scanner scanner = new Scanner(text)) {
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String propertyName = null;
-                String type = null;
-                String initialValue = null;
-                StringTokenizer stringTokenizer = new StringTokenizer(line);
-
-                if (stringTokenizer.hasMoreTokens()) {
-                    String token = stringTokenizer.nextToken();
-                    System.out.println("the token is " + token);
-                    if (token.equals("class")) {
-                        className = stringTokenizer.nextToken().replace("{", "");
-                        System.out.println("the class is " + className);
-                        inClassDef = true;
-                    }
-                    if (inClassDef) {
-                        if (token.equals("var")) {
-                            propertyName = line.substring(line.indexOf(stringTokenizer.nextToken()));
-                            if (line.contains(":")) {
-                                propertyName = propertyName.substring(0, propertyName.indexOf(":")).trim();
-                                if (line.contains("=")) {
-                                    type = line.substring(line.indexOf(":") + 1, line.indexOf("=")).trim();
-                                    initialValue = line.substring(line.indexOf("=") + 1).trim();
-                                    while (checkForMultLineInitial(initialValue)) {
-                                        StringBuilder sb = new StringBuilder(initialValue);
-                                        sb.append("\n").append(FOUR_SPACES).append(scanner.nextLine().trim());
-                                        initialValue = sb.toString();
-                                    }
-                                } else {
-                                    type = line.substring(line.indexOf(":") + 1).trim();
-                                    initialValue = null;
-                                }
-                            } else {
-                                System.out.println("THROW EXCEPTION BECAUSE NEED TO KNOW TYPE");
-                            }
-                        }
-                    }
-                }
-                if (propertyName != null && type != null) {
-                    properties.put(propertyName, type);
-                    initialValues.put(propertyName, initialValue);
-                }
-            }
+        try {
+            new SwiftGenerator().parseProperties(text);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String parseProperties(String text) throws Exception {
+
+        String className = null;
+        boolean inClassDef = false;
+
+        String totalText = text;
+        String propertyName = null;
+        String type = null;
+        String initialValue = null;
+        String line = null;
+
+        ArrayList<String> faultyProps = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(text)) {
+            scanner:
+            while (scanner.hasNextLine()) {
+
+                line = scanner.nextLine();
+
+                if (!inClassDef) {
+
+                    StringTokenizer stringTokenizer = new StringTokenizer(line);
+                    classLoop:
+                    while (stringTokenizer.hasMoreTokens()) {
+                        String token = stringTokenizer.nextToken();
+                        if (token.equals("class")) {
+
+                            className = stringTokenizer.nextToken();
+
+                            if (className.contains("{")) {
+                                className = className.substring(0, className.indexOf("{"));
+                            }
+                            text = text.substring(text.indexOf(className) + className.length());
+
+                            inClassDef = true;
+                            break scanner;
+                        }
+                    }
+                }
+            }
+
+            //have found class definition
+
+            if (inClassDef) {
+
+                Integer indexVar = text.indexOf("var");
+
+                if (text.indexOf("let") > 0 && text.indexOf("let") < text.indexOf("var")){
+                    indexVar = text.indexOf("let");
+                }
+
+
+                while (indexVar > 0) {
+
+                    text = text.substring(indexVar + 3);
+
+                    StringTokenizer st1 = new StringTokenizer(text);
+
+                    propertyName = st1.nextToken();
+
+                    if (propertyName.contains(":")) {
+                        propertyName = propertyName.substring(0, propertyName.indexOf(":"));
+                    }
+
+                    text = text.substring(text.indexOf(propertyName) + propertyName.length());
+
+                    StringTokenizer st2 = new StringTokenizer(text);
+
+                    String colon = st2.nextToken();
+
+                    if (colon.charAt(0) != ':') {
+                        faultyProps.add(propertyName);
+                    }
+
+                    text = text.substring(text.indexOf(colon) + 1);
+
+                    StringTokenizer st3 = new StringTokenizer(text);
+
+                    type = st3.nextToken();
+
+                    if (type.equals("=") || type.equals("var")) {
+                        faultyProps.add(propertyName);
+                    }
+
+                    if (type.contains("=")) {
+                        type = type.substring(0, type.indexOf("="));
+                    }
+
+                    if (type.contains(";")) {
+                        type = type.substring(0, type.indexOf(";"));
+                    }
+
+                    if (text.indexOf("let") > 0 && text.indexOf("let") < text.indexOf("var")){
+                        indexVar = text.indexOf("let");
+                    } else {
+                        indexVar = text.indexOf("var");
+
+                    }
+
+
+
+
+                    if (propertyName != null && type != null) {
+                        properties.put(propertyName, type);
+                        initialValues.put(propertyName, "null");
+                    }
+                }
+            }
+        }
+
+        if (faultyProps.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("Missing Type for ");
+
+            for (int i = 0; i < faultyProps.size(); i++) {
+                sb.append("property : \"" + faultyProps.get(i) + "\"");
+
+                if (i == faultyProps.size() - 1) {
+                    sb.append(".");
+                } else {
+                    sb.append(", ");
+                }
+            }
+
+            MainUtilities.generateAlert(sb.toString());
+            throw new Exception();
+        }
 
         return className;
+    }
+
+    @Override
+    public void filterOutPropertiesAlreadyPresent(String outputText) {
+
     }
 
     boolean checkForMultLineInitial(String line) {
@@ -123,6 +243,7 @@ public class SwiftGenerator extends GeneratorAncestor {
 
     @Override
     public String generateSetters() {
+
         StringBuilder sb = new StringBuilder();
         setterProperties.forEach((name, type) -> {
 
@@ -144,7 +265,7 @@ public class SwiftGenerator extends GeneratorAncestor {
             sb.append(name).append(": ").append(type).append(", ");
         });
 
-        if (!constructorProperties.isEmpty()){
+        if (!constructorProperties.isEmpty()) {
             sb.setLength(sb.length() - 2);
         }
 
@@ -160,6 +281,7 @@ public class SwiftGenerator extends GeneratorAncestor {
 
     @Override
     public String generateToString() {
+
         StringBuilder sb = new StringBuilder();
         sb.append(FOUR_SPACES).append("func toString() -> String{").append("\n");
 
@@ -173,6 +295,9 @@ public class SwiftGenerator extends GeneratorAncestor {
 
         sb.append("\"").append("\n");
         sb.append(FOUR_SPACES).append("}");
+
+        previousToStringMap = new LinkedHashMap<>(toStringProperties);
+
 
         return sb.toString();
     }

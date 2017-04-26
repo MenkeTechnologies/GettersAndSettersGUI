@@ -12,7 +12,11 @@ public class LanguageController {
 
    protected ArrayList<TextArea> textAreas = new ArrayList<>();
    public SplitPane mainSplitPane;
+   public String className;
+
     void test(){
         System.out.println("testing");
     }
+
+
 }
